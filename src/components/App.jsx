@@ -5,6 +5,7 @@ import { Contacts } from './Contacts/Contacts';
 import styled from 'styled-components';
 const Msg = styled.h2`
   text-align: center;
+  padding: 20px 0 0 0;
 `;
 
 export class App extends Component {
@@ -13,12 +14,6 @@ export class App extends Component {
     name: '',
     number: '',
     filter: '',
-  };
-
-  getStoragedContacts = e => {
-    const savedContacts = JSON.parse(localStorage.getItem('savedContacts'));
-    console.log(savedContacts);
-    this.setState({ contacts: savedContacts });
   };
 
   handleRemove = id => {
@@ -48,11 +43,18 @@ export class App extends Component {
       localStorage.setItem('savedContacts', `${JSON.stringify(addContact)}`);
     }
   };
+
   componentDidMount() {
-    this.getStoragedContacts();
+    const savedContacts = JSON.parse(localStorage.getItem('savedContacts'));
+    if (!savedContacts) return;
+
+    try {
+      this.setState({ contacts: savedContacts });
+    } catch (e) {
+      console.log(e);
+    }
   }
   render() {
-    console.log(this.state.contacts);
     return (
       <>
         <Form
@@ -63,7 +65,9 @@ export class App extends Component {
         />
         {this.state.contacts.length === 0 ? (
           <>
-            <Msg>Add some contacts to see the list</Msg>
+            <Msg>
+              There are no contacts to display. Add contacts to see the list.
+            </Msg>
           </>
         ) : (
           <Contacts
