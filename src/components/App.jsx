@@ -47,12 +47,7 @@ export class App extends Component {
   componentDidMount() {
     const savedContacts = JSON.parse(localStorage.getItem('savedContacts'));
     if (!savedContacts) return;
-
-    try {
-      this.setState({ contacts: savedContacts });
-    } catch (e) {
-      console.log(e);
-    }
+    this.setState({ contacts: savedContacts });
   }
   render() {
     return (
